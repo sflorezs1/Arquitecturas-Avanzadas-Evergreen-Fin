@@ -11,7 +11,7 @@ class Liability(AuditMixin, models.Model):
     Base Liability model
     """
 
-    id = fields.IntField(pk=True, generated=True)
+    id = fields.UUIDField(pk=True)
     type = fields.CharEnumField(LiabilityType, null=False)
     value = fields.FloatField(null=False)
     description = fields.TextField(null=True)
