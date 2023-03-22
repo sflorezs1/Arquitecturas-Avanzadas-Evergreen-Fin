@@ -1,8 +1,9 @@
+from typing import Any
 from patrimony_back.models.LiabilityType import LiabilityType
 from patrimony_back.models.mixins.AuditMixin import AuditMixin
+from pydantic import BaseModel
 
 from tortoise import fields, models
-from tortoise.contrib.pydantic import pydantic_model_creator
 
 
 class Liability(AuditMixin, models.Model):
@@ -17,5 +18,17 @@ class Liability(AuditMixin, models.Model):
     name = fields.CharField(max_length=64)
     
 
-Liability_Pydantic = pydantic_model_creator(Liability, name="Liability")
-LiabilityIn_Pydantic = pydantic_model_creator(Liability, name="Liability", exclude_readonly=True)
+class Liability_Pydantic(BaseModel):
+    id: Any
+    type: LiabilityType
+    value: float
+    description: str
+    name: str
+    created_at: Any
+
+
+class LiabilityIn_Pydantic(BaseModel):
+    type: LiabilityType
+    value: float
+    description: str
+    name: str
