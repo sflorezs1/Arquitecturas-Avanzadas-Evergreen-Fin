@@ -1,15 +1,16 @@
 from patrimony_back.models.LiabilityType import LiabilityType
+from patrimony_back.models.mixins.AuditMixin import AuditMixin
 
 from tortoise import fields, models
 from tortoise.contrib.pydantic import pydantic_model_creator
 
 
-class Liability(models.Model):
+class Liability(AuditMixin, models.Model):
     """
     Base Liability model
     """
 
-    id = fields.UUIDField(pk=True)
+    id = fields.IntField(pk=True, generated=True)
     type = fields.CharEnumField(LiabilityType, null=False)
     value = fields.FloatField(null=False)
     description = fields.TextField(null=True)
