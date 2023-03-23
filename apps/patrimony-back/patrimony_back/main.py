@@ -1,4 +1,6 @@
 from fastapi import FastAPI
+from patrimony_back.routers.LiabilityTypeRouter import LiabilityTypeRouter
+from patrimony_back.routers.AssetTypeRouter import AssetTypeRouter
 from tortoise.contrib.fastapi import register_tortoise
 # Import all models so Tortoise registers them
 import patrimony_back.models as models
@@ -21,3 +23,5 @@ register_tortoise(
 # Add routers
 app.include_router(AssetRouter)
 app.include_router(LiabilityRouter)
+app.include_router(AssetTypeRouter)
+app.include_router(LiabilityTypeRouter)

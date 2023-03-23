@@ -15,29 +15,34 @@
 
 <body>
     <h2 class="card-title m-4">{{ title }}</h2>
+    {% if notification %}
+    <div class="alert alert-success" role="alert">
+        Item creado con id = {{notification}}
+    </div>
+    {% endif %}
     <div class="card m-4 p-4">
         <div class="card-body">
-            <form action="{{ url_for('save') }}" method="post">
+            <form action="{{ url_for('save_liability') }}" method="post">
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nombre del activo*</label>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="Computador Pear 2">
+                    <label for="name" class="form-label">Nombre del pasivo*</label>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="Prestamo semillas">
                 </div>
                 <div class="mb-3">
-                    <label for="description" class="form-label">Descripción del activo</label>
+                    <label for="description" class="form-label">Descripción del pasivo</label>
                     <textarea class="form-control" id="description" rows="3" name="description"
-                        placeholder="Computador Pear 2 con especificaciones..."></textarea>
+                        placeholder="Prestamo para compra de semillas"></textarea>
                 </div>
                 <div class="mb-3">
-                    <label for="value" class="form-label">Valor del activo*</label>
+                    <label for="value" class="form-label">Valor del pasivo*</label>
                     <div class="input-group">
                         <span class="input-group-text" id="basic-addon1">COP $</span>
                         <input type="number" class="form-control" id="value" name="value" placeholder="2000000">
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="type" class="form-label">Tipo de activo</label>
+                    <label for="type" class="form-label">Tipo de pasivo</label>
                     <select name="type" id="type" class="form-select">
-                        {% for option in assetTypes %}
+                        {% for option in liabilityTypes %}
                         <option value="{{ option }}" {{ "selected" if loop.first else "" }}>{{ option }}</option>
                         {% endfor %}
                     </select>

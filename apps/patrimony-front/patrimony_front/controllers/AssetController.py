@@ -1,24 +1,26 @@
-from typing import List
-from patrimony_front.controllers.Connection import BackendConnection
-from ..models.Asset import AssetI
+from pathlib import Path
+from fastapi import APIRouter, Form, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
-conn = BackendConnection()
+from patrimony_front.models.Asset import create
+from patrimony_front.models.AssetType import get_types
 
-async def getOne(id) -> AssetI:
-    return await conn.get(f"assets/{id}")
+BASE_DIR = Path(__file__).resolve().parent
 
-async def getAll() -> List[AssetI]:
-    return await conn.get(f"assets")
+templates = Jinja2Templates(directory=Path(BASE_DIR, "../templates/asset"))
+AssetsRouter = APIRouter(prefix="/assets")
 
-async def create(data: AssetI) -> AssetI:
-    print(data)
-    return await conn.post("assets", data)
+@AssetsRouter.get("/create", response_class=HTMLResponse)
+async def create_asset(request: Request):
+    types = await get_types()
+    return templates.TemplateResponse("create.html", {
+        "request": request,
+        "title": "Registra un nuevo activo",
+        "assetTypes": types["types"]
+    })
 
-async def update(id, data: AssetI) -> AssetI:
-    return await conn.put(f"assets/{id}", data)
-
-async def deleteAll() -> List[AssetI]:
-    return await conn.delete("assets")
-
-async def deleteOne(id):
-    return await conn.delete(f"assets/{id}")
+@AssetsRouter.post("/save")
+async def save_asset(request: Request):
+    data = await request.form()
+    return await create({**data})

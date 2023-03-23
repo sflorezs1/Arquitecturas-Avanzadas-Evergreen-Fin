@@ -1,4 +1,5 @@
 from fastapi_crudrouter import TortoiseCRUDRouter
+from patrimony_back.models import AssetType
 from patrimony_back.models.Asset import Asset, Asset_Pydantic, AssetIn_Pydantic
 
 AssetRouter = TortoiseCRUDRouter(

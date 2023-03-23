@@ -1,23 +1,26 @@
-from typing import List
-from patrimony_front.controllers.Connection import BackendConnection
-from ..models.Liability import LiabilityI
+from pathlib import Path
+from fastapi import APIRouter, Form, Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
-conn = BackendConnection()
+from patrimony_front.models.Liability import create
+from patrimony_front.models.LiabilityType import get_types
 
-async def getOne(id) -> LiabilityI:
-    return await conn.get(f"liabilitys/{id}")
+BASE_DIR = Path(__file__).resolve().parent
 
-async def getAll() -> List[LiabilityI]:
-    return await conn.get(f"liabilitys")
+templates = Jinja2Templates(directory=Path(BASE_DIR, "../templates/liability"))
+LiabilitysRouter = APIRouter(prefix="/liabilitys")
 
-async def create(data: LiabilityI) -> LiabilityI:
-    return await conn.post("liabilitys", data)
+@LiabilitysRouter.get("/create", response_class=HTMLResponse)
+async def create_liability(request: Request):
+    types = await get_types()
+    return templates.TemplateResponse("create.html", {
+        "request": request,
+        "title": "Registra un nuevo pasivo",
+        "liabilityTypes": types["types"]
+    })
 
-async def update(id, data: LiabilityI) -> LiabilityI:
-    return await conn.put(f"liabilitys/{id}", data)
-
-async def deleteAll() -> List[LiabilityI]:
-    return await conn.delete("liabilitys")
-
-async def deleteOne(id):
-    return await conn.delete(f"liabilitys/{id}")
+@LiabilitysRouter.post("/save")
+async def save_liability(request: Request):
+    data = await request.form()
+    return await create({**data})
