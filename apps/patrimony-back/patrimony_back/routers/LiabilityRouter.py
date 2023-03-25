@@ -1,4 +1,4 @@
-from fastapi_crudrouter import TortoiseCRUDRouter
+from libs.TortoiseCRUDRouter import TortoiseCRUDRouter
 from patrimony_back.models import LiabilityType
 from patrimony_back.models.Liability import Liability, Liability_Pydantic, LiabilityIn_Pydantic
 
